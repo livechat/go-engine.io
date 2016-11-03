@@ -4,7 +4,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/nkovacs/go-engine.io/parser"
+	"github.com/livechat/go-engine.io/parser"
 )
 
 type connReader struct {

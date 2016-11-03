@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/nkovacs/go-engine.io/message"
+	"github.com/livechat/go-engine.io/message"
 )
 
 // PacketType is the type of packet

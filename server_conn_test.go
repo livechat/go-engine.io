@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/nkovacs/go-engine.io/message"
-	"github.com/nkovacs/go-engine.io/parser"
-	"github.com/nkovacs/go-engine.io/polling"
-	"github.com/nkovacs/go-engine.io/websocket"
+	"github.com/livechat/go-engine.io/message"
+	"github.com/livechat/go-engine.io/parser"
+	"github.com/livechat/go-engine.io/polling"
+	"github.com/livechat/go-engine.io/websocket"
 	. "github.com/smartystreets/goconvey/convey"
 )
 

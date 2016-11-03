@@ -1,7 +1,7 @@
 package polling
 
 import (
-	"github.com/nkovacs/go-engine.io/transport"
+	"github.com/livechat/go-engine.io/transport"
 )
 
 var Creater = transport.Creater{

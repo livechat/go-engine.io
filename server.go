@@ -9,8 +9,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/nkovacs/go-engine.io/polling"
-	"github.com/nkovacs/go-engine.io/websocket"
+	"github.com/livechat/go-engine.io/polling"
+	"github.com/livechat/go-engine.io/websocket"
 )
 
 type config struct {

@@ -4,8 +4,8 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/nkovacs/go-engine.io/message"
-	"github.com/nkovacs/go-engine.io/parser"
+	"github.com/livechat/go-engine.io/message"
+	"github.com/livechat/go-engine.io/parser"
 )
 
 type Callback interface {

@@ -9,9 +9,9 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/nkovacs/go-engine.io/message"
-	"github.com/nkovacs/go-engine.io/parser"
-	"github.com/nkovacs/go-engine.io/transport"
+	"github.com/livechat/go-engine.io/message"
+	"github.com/livechat/go-engine.io/parser"
+	"github.com/livechat/go-engine.io/transport"
 )
 
 type client struct {
