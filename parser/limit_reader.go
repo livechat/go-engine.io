@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"bufio"
 	"io"
 )
 
@@ -20,12 +21,31 @@ func (r *limitReader) Read(b []byte) (int, error) {
 	if r.remain == 0 {
 		return 0, io.EOF
 	}
-	if len(b) > r.remain {
-		b = b[:r.remain]
+
+	reader, ok := r.Reader.(*bufio.Reader)
+	if !ok {
+		reader = bufio.NewReader(r.Reader)
 	}
-	n, err := r.Reader.Read(b)
-	r.remain -= n
-	return n, err
+
+	max := r.remain
+	if len(b) < max {
+		max = len(b)
+	}
+
+	count := 0
+	for i := 0; i < max; i++ {
+		myRune, n, err := reader.ReadRune()
+		if err != nil {
+			return count, err
+		}
+		myBytes := []byte(string(myRune))
+		for j := 0; j < n; j++ {
+			b[count] = myBytes[j]
+			count++
+			r.remain--
+		}
+	}
+	return count, nil
 }
 
 func (r *limitReader) Close() error {
