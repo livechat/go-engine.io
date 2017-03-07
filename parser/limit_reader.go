@@ -17,7 +17,7 @@ func newLimitReader(r io.Reader, limit int) *limitReader {
 	}
 }
 
-func (r *limitReader) Read(b []byte) (int, error) {
+func (r *limitReader) Read(buf []byte) (int, error) {
 	if r.remain == 0 {
 		return 0, io.EOF
 	}
@@ -27,25 +27,25 @@ func (r *limitReader) Read(b []byte) (int, error) {
 		reader = bufio.NewReader(r.Reader)
 	}
 
-	max := r.remain
-	if len(b) < max {
-		max = len(b)
+	limit := r.remain
+	if len(buf) < limit {
+		limit = len(buf)
 	}
 
-	count := 0
-	for i := 0; i < max; i++ {
-		myRune, n, err := reader.ReadRune()
+	var idx int
+	for i := 0; i < limit; i++ {
+		c, _, err := reader.ReadRune()
 		if err != nil {
-			return count, err
+			return idx, err
 		}
-		myBytes := []byte(string(myRune))
-		for j := 0; j < n; j++ {
-			b[count] = myBytes[j]
-			count++
-			r.remain--
+		bytes := []byte(string(c))
+		for _, b := range bytes {
+			buf[idx] = b
+			idx++
 		}
+		r.remain--
 	}
-	return count, nil
+	return idx, nil
 }
 
 func (r *limitReader) Close() error {
