@@ -25,9 +25,11 @@ func (w *Writer) Close() error {
 	if w.server.getState() != stateNormal {
 		return errors.New("use of closed network connection")
 	}
+	// if _, ok := <-w.server.sendChan; ok {
 	select {
 	case w.server.sendChan <- true:
 	default:
 	}
+	// }
 	return w.WriteCloser.Close()
 }
