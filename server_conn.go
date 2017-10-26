@@ -207,19 +207,21 @@ func (c *serverConn) OnPacket(r *parser.PacketDecoder) {
 	case parser.CLOSE:
 		c.getCurrent().Close()
 	case parser.PING:
-		c.writerLocker.Lock()
 		t := c.getCurrent()
 		u := c.getUpgrade()
 		newWriter := t.NextWriter
 		if u != nil {
-			go c.noopLoop()
 			newWriter = u.NextWriter
 		}
+		c.writerLocker.Lock()
 		if w, _ := newWriter(message.MessageText, parser.PONG); w != nil {
 			io.Copy(w, r)
 			w.Close()
 		}
 		c.writerLocker.Unlock()
+		if u != nil {
+			go c.noopLoop()
+		}
 		fallthrough
 	case parser.PONG:
 		c.pingLocker.Lock()
@@ -385,11 +387,22 @@ func (c *serverConn) pingLoop() {
 	}
 }
 func (c *serverConn) noopLoop() {
-	for c.getUpgrade() != nil {
+	upgradeTimes := 0
+	for upgradeTimes < 100 {
 		t := c.getCurrent()
-		if w, _ := t.NextWriter(message.MessageText, parser.NOOP); w != nil {
+		if t == nil {
+			return
+		}
+		c.writerLocker.Lock()
+		w, err := t.NextWriter(message.MessageText, parser.NOOP)
+		if w != nil {
 			w.Close()
 		}
-		time.Sleep(200 * time.Millisecond)
+		c.writerLocker.Unlock()
+		if err != nil {
+			return
+		}
+		upgradeTimes++
+		time.Sleep(100 * time.Millisecond)
 	}
 }
